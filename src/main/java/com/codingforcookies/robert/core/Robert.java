@@ -2,7 +2,7 @@ package com.codingforcookies.robert.core;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
-public class Robert extends JavaPlugin{
+public class Robert{
 
 	private static Robert robert;
 	private JavaPlugin plugin;
@@ -13,11 +13,6 @@ public class Robert extends JavaPlugin{
 
 	public JavaPlugin getPlugin(){
 		return this.plugin;
-	}
-
-	public void onEnable(){
-		robert = this;
-		plugin = this;
 	}
 
 	public static void enablePortable(JavaPlugin plugin){
