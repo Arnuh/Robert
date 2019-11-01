@@ -1,9 +1,11 @@
 package com.codingforcookies.robert.core;
 
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -24,6 +26,7 @@ public class GUIListener implements org.bukkit.event.Listener{
 
 	public void unbind(){
 		InventoryClickEvent.getHandlerList().unregister(this);
+		InventoryDragEvent.getHandlerList().unregister(this);
 		InventoryCloseEvent.getHandlerList().unregister(this);
 	}
 
@@ -43,11 +46,22 @@ public class GUIListener implements org.bukkit.event.Listener{
 		if(event.getClickedInventory() == event.getWhoClicked().getInventory()){
 			this.gui.onClickPlayerInventory(this.gui, event.getClickedInventory(), event.getSlot(), (Player) event.getWhoClicked(), event.getClick());
 			event.setCancelled(true);
+			event.setResult(Event.Result.DENY);
 			return;
 		}
 		event.setCancelled(true);
+		event.setResult(Event.Result.DENY);
 		ISlotAction action = this.gui.getSlot(event.getSlot());
 		if(action != null) action.doAction(this.gui, (Player) event.getWhoClicked(), event.getClick());
+	}
+	
+	@EventHandler
+	public void onInventoryDrag(InventoryDragEvent event){
+		if(!isGUI(event.getInventory())){
+			return;
+		}
+		event.setCancelled(true);
+		event.setResult(Event.Result.DENY);
 	}
 
 	@EventHandler
