@@ -45,7 +45,7 @@ public class GUIListener implements org.bukkit.event.Listener{
 		}
 		event.setCancelled(true);
 		event.setResult(Event.Result.DENY);
-		if(event.getClickedInventory().equals(event.getWhoClicked().getInventory())){
+		if(event.getClickedInventory() != null && event.getClickedInventory().equals(event.getWhoClicked().getInventory())){
 			this.gui.onClickPlayerInventory(this.gui, event.getClickedInventory(), event.getSlot(), (Player) event.getWhoClicked(), event.getClick());
 			return;
 		}

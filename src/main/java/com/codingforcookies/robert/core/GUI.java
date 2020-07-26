@@ -13,47 +13,18 @@ import org.bukkit.inventory.ItemStack;
 import com.codingforcookies.robert.slot.ISlotAction;
 
 public class GUI{
-
-	private boolean allowClose = false;
-	private int fixedScheduler;
-	private boolean fixed = false;
-
-	public int getFixedScheduler(){
-		return fixedScheduler;
-	}
-
-	public boolean isFixed(){
-		return this.fixed;
-	}
-
-	private String title = "[Unnamed GUI]";
-
-	public String getTitle(){
-		return this.title;
-	}
-
+	
+	private final String title;
 	private InventoryType type = InventoryType.CHEST;
-
-	public Inventory getInventory(){
-		return this.inv;
-	}
-
-	public ISlotAction getSlot(int i){
-		if(i >= this.slots.length) return null;
-		if(i < 0){
-			//Im leaving this commented out cause I assume it was a bug in a previous minecraft version.
-			/*if(!this.fixed || this.allowClose){
-				this.listener.onInventoryClosed(new InventoryCloseEvent(this.invView));
-			}*/
-			return null;
-		}
-		return this.slots[i];
-	}
-
+	
 	private Inventory inv;
 	private InventoryView invView;
 	private final GUIListener listener;
 	private ISlotAction[] slots;
+	
+	private boolean allowClose = false;
+	//private int fixedScheduler;
+	private boolean fixed = false;
 
 	public GUI(String title){
 		this.title = title;
@@ -99,25 +70,53 @@ public class GUI{
 		return slot(x + y * 9, item, action);
 	}
 
-	public void open(Player p){
+	public void open(Player player){
 		this.listener.bind();
-		this.invView = p.openInventory(this.inv);
+		this.invView = player.openInventory(this.inv);
 	}
 
-	public void close(Player p){
+	public void close(Player player){
 		this.allowClose = true;
-		p.closeInventory();
+		player.closeInventory();
 	}
 
-	public void onClose(Player p){}
+	public void onClose(Player player){}
 
-	public void onClickPlayerInventory(GUI gui, Inventory inventory, int slot, Player p, ClickType clickType){}
+	public void onClickPlayerInventory(GUI gui, Inventory inventory, int slot, Player player, ClickType clickType){}
+	
+	public ISlotAction getSlot(int i){
+		if(i >= this.slots.length) return null;
+		if(i < 0){
+			//Im leaving this commented out cause I assume it was a bug in a previous minecraft version.
+			/*if(!this.fixed || this.allowClose){
+				this.listener.onInventoryClosed(new InventoryCloseEvent(this.invView));
+			}*/
+			return null;
+		}
+		return this.slots[i];
+	}
 
 	public InventoryView getInventoryView(){
 		return invView;
 	}
+	
+	public Inventory getInventory(){
+		return this.inv;
+	}
 
 	public boolean allowClose(){
 		return allowClose;
+	}
+	
+	/*public int getFixedScheduler(){
+		return fixedScheduler;
+	}*/
+	
+	public boolean isFixed(){
+		return this.fixed;
+	}
+	
+	public String getTitle(){
+		return this.title;
 	}
 }
