@@ -14,7 +14,7 @@ import com.codingforcookies.robert.slot.ISlotAction;
 
 public class GUIListener implements org.bukkit.event.Listener{
 
-	private GUI gui;
+	private final GUI gui;
 
 	public GUIListener(GUI gui){
 		this.gui = gui;
@@ -43,16 +43,16 @@ public class GUIListener implements org.bukkit.event.Listener{
 		if(!isGUI(event.getInventory())){
 			return;
 		}
-		if(event.getClickedInventory() == event.getWhoClicked().getInventory()){
-			this.gui.onClickPlayerInventory(this.gui, event.getClickedInventory(), event.getSlot(), (Player) event.getWhoClicked(), event.getClick());
-			event.setCancelled(true);
-			event.setResult(Event.Result.DENY);
-			return;
-		}
 		event.setCancelled(true);
 		event.setResult(Event.Result.DENY);
+		if(event.getClickedInventory().equals(event.getWhoClicked().getInventory())){
+			this.gui.onClickPlayerInventory(this.gui, event.getClickedInventory(), event.getSlot(), (Player) event.getWhoClicked(), event.getClick());
+			return;
+		}
 		ISlotAction action = this.gui.getSlot(event.getSlot());
-		if(action != null) action.doAction(this.gui, (Player) event.getWhoClicked(), event.getClick());
+		if(action != null){
+			action.doAction(this.gui, (Player) event.getWhoClicked(), event.getClick());
+		}
 	}
 	
 	@EventHandler
@@ -71,11 +71,11 @@ public class GUIListener implements org.bukkit.event.Listener{
 		}
 		this.gui.onClose((Player) event.getPlayer());
 		unbind();
-		if((this.gui.isFixed()) && (!this.gui.allowClose())){
+		if(this.gui.isFixed() && !this.gui.allowClose()){
 			new BukkitRunnable(){
 
 				public void run(){
-					GUIListener.this.gui.open((Player) event.getPlayer());
+					gui.open((Player) event.getPlayer());
 				}
 			}.runTaskLater(Robert.getInstance().getPlugin(), 1L);
 		}

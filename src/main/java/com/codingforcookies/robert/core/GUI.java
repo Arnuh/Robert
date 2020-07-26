@@ -41,7 +41,10 @@ public class GUI{
 	public ISlotAction getSlot(int i){
 		if(i >= this.slots.length) return null;
 		if(i < 0){
-			if((!this.fixed) || ((this.fixed) && (this.allowClose))) this.listener.onInventoryClosed(new InventoryCloseEvent(this.invView));
+			//Im leaving this commented out cause I assume it was a bug in a previous minecraft version.
+			/*if(!this.fixed || this.allowClose){
+				this.listener.onInventoryClosed(new InventoryCloseEvent(this.invView));
+			}*/
 			return null;
 		}
 		return this.slots[i];
@@ -49,7 +52,7 @@ public class GUI{
 
 	private Inventory inv;
 	private InventoryView invView;
-	private GUIListener listener;
+	private final GUIListener listener;
 	private ISlotAction[] slots;
 
 	public GUI(String title){
@@ -115,6 +118,6 @@ public class GUI{
 	}
 
 	public boolean allowClose(){
-		return allowClose();
+		return allowClose;
 	}
 }
